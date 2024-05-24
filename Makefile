@@ -6,7 +6,7 @@
 #    By: alarose <alarose@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/23 15:39:00 by alarose           #+#    #+#              #
-#    Updated: 2024/05/23 16:03:07 by alarose          ###   ########.fr        #
+#    Updated: 2024/05/24 15:23:30 by alarose          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ fclean : clean
 
 re : fclean all
 
-bonus : $(OBJ) ${OBJ_BONUS}
-	$(AR) ${NAME} ${OBJ} ${OBJ_BONUS}
+#bonus : $(OBJ) ${OBJ_BONUS}
+#	$(AR) ${NAME} ${OBJ} ${OBJ_BONUS}
 
 .PHONY: all clean fclean re bonus

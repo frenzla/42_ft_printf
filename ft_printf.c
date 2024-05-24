@@ -6,73 +6,67 @@
 /*   By: alarose <alarose@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:15:51 by alarose           #+#    #+#             */
-/*   Updated: 2024/05/23 15:27:44 by alarose          ###   ########.fr       */
+/*   Updated: 2024/05/24 14:40:32 by alarose          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	p_hex(long long nb, char x)
+int	p_hex(unsigned int nb, char x, int *count)
 {
-	if (!nb)
-		return (0);
 	if (nb >= 16)
-		p_hex(nb / 16, x);
+		p_hex(nb / 16, x, count);
 	if (x == 'x')
-		ft_putchar(HEX_LOWER[nb % 16]);
+		ft_putchar(HEX_LOWER[nb % 16], count);
 	else
-		ft_putchar(HEX_UPPER[nb % 16]);
+		ft_putchar(HEX_UPPER[nb % 16], count);
 	return (1);
 }
 
-int	p_p(unsigned long nb, char x)
+int	p_p(unsigned long nb, char x, int *count)
 {
 	if (nb == 0)
 	{
-		write(1, "(nil)", 5);
+		ft_putstr("(nil)", count);
 		return (1);
 	}
 	if (nb < 16)
-		ft_putstr("0x");
+		ft_putstr("0x", count);
 	if (nb >= 16)
-		p_p(nb / 16, x);
+		p_p(nb / 16, x, count);
 	if (x == 'x')
 	{
-		ft_putchar(HEX_LOWER[nb % 16]);
+		ft_putchar(HEX_LOWER[nb % 16], count);
 		return (1);
 	}
 	else
 	{
-		ft_putchar(HEX_UPPER[nb % 16]);
+		ft_putchar(HEX_UPPER[nb % 16], count);
 		return (1);
 	}
 	return (0);
 }
 
-int	p_int(int n)
+int	p_int(int n, int *count)
 {
-	if (!n)
-		return (0);
 	if (n == INT_MIN)
-		return (write(1, "-2147483648", 11), 1);
+		return (ft_putstr("-2147483648", count), 1);
 	if (n < 0)
 	{
-		ft_putchar('-');
+		ft_putchar('-', count);
 		n = -n;
 	}
 	if (n >= 10)
-		p_int(n / 10);
-	ft_putchar(n % 10 + '0');
+		p_int(n / 10, count);
+	ft_putchar(n % 10 + '0', count);
 	return (1);
 }
 
-int	p_u(unsigned int u)
+int	p_u(unsigned int u, int *count)
 {
-	if (!u)
-		return (0);
 	if (u >= 10)
-		p_u(u / 10);
-	ft_putchar(u % 10 + '0');
+		p_u(u / 10, count);
+	ft_putchar(u % 10 + '0', count);
 	return (1);
 }
 
@@ -81,35 +75,33 @@ int	ft_printf(const char *str, ...)
 	va_list	args;
 	char	type;
 	int		i;
-	int		ret;
+	int		count;
 
 	va_start(args, str);
 	i = 0;
+	count = 0;
 	while (str[i])
 	{
 		if (str[i] == '%' && is_in_set(str[i + 1]))
 		{
 			type = str[i + 1];
-			ret = check_n_print(args, type);
-			if (ret == 0)
-				return (0);
+			check_n_print(args, type, &count);
 			i += 2;
 		}
 		else
 		{
-			write(1, &(str[i]), 1);
+			ft_putchar(str[i], &count);
 			i++;
 		}
 	}
-	return (ret);
+	return (count);
 }
-
-/*#include <stdlib.h>
+/*
+#include <stdlib.h>
 
 int	main(void)
 {
 	char		s[] = "Hello";
-	long long	L = 0;
 	size_t		i;
 	size_t		size;
 	size_t		size_int;
@@ -118,6 +110,7 @@ int	main(void)
 	size_t		size_strs;
 	size_t		size_char;
 	size_t		size_u;
+	int			ret;
 
 		char	c1 = 'c';
 		int		c2 = -457;
@@ -143,8 +136,9 @@ int	main(void)
 		size_u = 9;
 
 		int	test_hex[] = {42, -42, 2589974, -2589974, 0,
-		INT_MAX, INT_MIN, UINT_MAX, UINT_MAX + 7};
-		size_hex = 9;
+		INT_MAX, INT_MIN, UINT_MAX, UINT_MAX + 7,
+		LONG_MAX, LONG_MIN, ULONG_MAX, 9223372036854775807LL};
+		size_hex = 13;
 
 		char	*p1, *p2, *p3;
 		p1 = malloc(sizeof(char));
@@ -215,12 +209,15 @@ int	main(void)
 		}
 
 		printf("\nTests for HEX (%%x):\n");
+		ret = 0;
 		i = 0;
 		size = size_hex;
 		while (i < size)
 		{
-			ft_printf("%x", test_hex[i]);
-			printf(" VS printf: %x\n", test_hex[i]);
+			ret = ft_printf("%x", test_hex[i]);
+			printf(" (RET = %d) VS printf: ", ret);
+			ret = printf("%x", test_hex[i]);
+			printf(" (RET = %d)\n", ret);
 			i++;
 		}
 
@@ -250,9 +247,11 @@ int	main(void)
 			i++;
 		}
 
-		ft_printf("Tesing a char |%c|, now a str |%s|, an adress: |%p|,
-		\n int |%d|, other int |%i|, u |%u|, HEX x |%x|,\n HEX X |%X|,
-		 and finishing with a %%\n", c1, s, p1, test_int[0], test_int[0],
-		 test_u[0], test_hex[0], test_hex[0]);
+	ret = ft_printf("| %p %p |", 0, 0);
+	printf(" => RET: %d", ret);
+	printf("\n"); ret = printf("| %p %p |", 0, 0);
+	printf(" => RET: %d", ret);
+	printf("\n\n");
+
 	return (0);
 }*/

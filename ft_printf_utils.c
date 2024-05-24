@@ -6,52 +6,50 @@
 /*   By: alarose <alarose@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:16:33 by alarose           #+#    #+#             */
-/*   Updated: 2024/05/23 15:27:48 by alarose          ###   ########.fr       */
+/*   Updated: 2024/05/24 14:34:10 by alarose          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	check_n_print(va_list args, char c)
+int	check_n_print(va_list args, char c, int *count)
 {
 	if (c == 'c')
-		return (ft_putchar(va_arg(args, int)));
+		return (ft_putchar(va_arg(args, int), count));
 	if (c == 's')
-		return (ft_putstr(va_arg(args, char *)));
+		return (ft_putstr(va_arg(args, char *), count));
 	if (c == 'p')
-		return (p_p(va_arg(args, unsigned long), 'x'));
+		return (p_p(va_arg(args, unsigned long), 'x', count));
 	if (c == 'd' || c == 'i')
-		return (p_int(va_arg(args, int)));
+		return (p_int(va_arg(args, int), count));
 	if (c == 'u')
-		return (p_u(va_arg(args, unsigned int)));
+		return (p_u(va_arg(args, unsigned int), count));
 	if (c == 'x')
-		return (p_hex(va_arg(args, long long), 'x'));
+		return (p_hex(va_arg(args, unsigned int), 'x', count));
 	if (c == 'X')
-		return (p_hex(va_arg(args, long long), 'X'));
+		return (p_hex(va_arg(args, unsigned int), 'X', count));
 	if (c == '%')
-		return (ft_putchar('%'));
+		return (ft_putchar('%', count));
 	return (0);
 }
 
-int	ft_putchar(int c)
+int	ft_putchar(int c, int *count)
 {
 	char	cc;
 
-	if (!c)
-		return (0);
 	cc = (char)c;
 	write(1, &cc, 1);
+	(*count)++;
 	return (1);
 }
 
-int	ft_putstr(char *str)
+int	ft_putstr(char *str, int *count)
 {
 	if (!str)
-		return (0);
-	while (*str)
-	{
-		write(1, str++, 1);
-	}
+		ft_putstr("(null)", count);
+	else
+		while (*str)
+			ft_putchar(*str++, count);
 	return (1);
 }
 
