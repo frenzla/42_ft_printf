@@ -6,7 +6,7 @@
 #    By: alarose <alarose@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/23 15:39:00 by alarose           #+#    #+#              #
-#    Updated: 2024/05/24 15:23:30 by alarose          ###   ########.fr        #
+#    Updated: 2024/05/28 11:51:29 by alarose          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ $(NAME) : $(OBJ)
 
 clean :
 	/bin/rm -f $(OBJ)
-	/bin/rm -f $(OBJ_BONUS)
+#	/bin/rm -f $(OBJ_BONUS)
 
 fclean : clean
 	/bin/rm -f $(NAME)
@@ -51,4 +51,4 @@ re : fclean all
 #bonus : $(OBJ) ${OBJ_BONUS}
 #	$(AR) ${NAME} ${OBJ} ${OBJ_BONUS}
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re #bonus
