@@ -6,7 +6,7 @@
 #    By: alarose <alarose@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/23 15:39:00 by alarose           #+#    #+#              #
-#    Updated: 2024/05/28 11:51:29 by alarose          ###   ########.fr        #
+#    Updated: 2024/05/29 14:09:49 by alarose          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ SRCS = $(addprefix $(SRCDIR), $(SRC))
 BONUS_FILES = $(addprefix $(BONUSDIR), $(BONUS))
 HEADERS_PATH = ./
 HEADERS = -I $(HEADERS_PATH)
-CC = gcc
+CC = cc
 OBJ = $(SRCS:.c=.o)
 OBJ_BONUS = $(BONUS_FILES:.c=.o)
 CFLAGS = -Wall -Wextra -Werror
