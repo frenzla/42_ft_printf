@@ -6,7 +6,7 @@
 /*   By: alarose <alarose@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 14:15:51 by alarose           #+#    #+#             */
-/*   Updated: 2024/05/29 14:09:15 by alarose          ###   ########.fr       */
+/*   Updated: 2024/05/30 09:48:43 by alarose          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	ft_printf(const char *str, ...)
 	i = 0;
 	count = 0;
 	if (str == NULL)
-		return (-1);
+		return (va_end(args), -1);
 	while (str[i])
 	{
 		if (str[i] == '%' && str[i + 1] == '\0')
